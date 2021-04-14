@@ -5,6 +5,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 import keys as key
 
+# Total ETFs
+nETF = 3
 # Headless operation
 hls = True
 
@@ -26,18 +28,24 @@ login.click()
 
 # Retrieve total earnings
 driver.get('https://personal.vanguard.com/us/XHTML/com/vanguard/costbasisnew/xhtml/CostBasisSummary.xhtml')
-cost_basis = WebDriverWait(driver, 5).until(
-    EC.presence_of_element_located((By.CLASS_NAME, 'total.nr.right'))
-)
-total_gains = cost_basis.text
+total_gains = WebDriverWait(driver, 5).until(
+    EC.presence_of_element_located((By.CLASS_NAME, 'total.nr.right'))).text
 
 # Retrieve individual performance
 driver.get('https://personal.vanguard.com/us/TPView#634664130132126')
-vug_ar = driver.find_element_by_css_selector('#BHForm2\:accountID\:1\:_id243tbody0 > tr:nth-child(3) > td:nth-child(7) > span:nth-child(1)')
-vht_ar = driver.find_element_by_css_selector('#BHForm2\:accountID\:1\:_id243tbody0 > tr:nth-child(4) > td:nth-child(7) > span:nth-child(1)')
-vpu_ar = driver.find_element_by_css_selector('#BHForm2\:accountID\:1\:_id243tbody0 > tr:nth-child(5) > td:nth-child(7) > span:nth-child(1)')
-
+etfs, pcts, count = [], [], 3
+try:
+    while count <= nETF+2:
+        etfs.append( driver.find_element_by_css_selector(
+        '#BHForm2\:accountID\:1\:_id243tbody0 > tr:nth-child(%s) > td:nth-child(1)'%count).text
+        )
+        pcts.append( driver.find_element_by_css_selector(
+        '#BHForm2\:accountID\:1\:_id243tbody0 > tr:nth-child(%s) > td:nth-child(7) > span:nth-child(1)'%count).text
+        )
+        count+=1
+finally:
+    pass
 
 print(total_gains)
-for i in (vug_ar, vht_ar, vpu_ar):
-    print(i.text)
+for i in range(len(etfs)):
+    print(etfs[i], pcts[i].split())
