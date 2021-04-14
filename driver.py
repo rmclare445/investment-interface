@@ -34,17 +34,14 @@ total_gains = WebDriverWait(driver, 5).until(
 # Retrieve individual performance
 driver.get('https://personal.vanguard.com/us/TPView#634664130132126')
 etfs, pcts, count = [], [], 3
-try:
-    while count <= nETF+2:
-        etfs.append( driver.find_element_by_css_selector(
-        '#BHForm2\:accountID\:1\:_id243tbody0 > tr:nth-child(%s) > td:nth-child(1)'%count).text
-        )
-        pcts.append( driver.find_element_by_css_selector(
-        '#BHForm2\:accountID\:1\:_id243tbody0 > tr:nth-child(%s) > td:nth-child(7) > span:nth-child(1)'%count).text
-        )
-        count+=1
-finally:
-    pass
+while count <= nETF+2:
+    etfs.append( driver.find_element_by_css_selector(
+    '#BHForm2\:accountID\:1\:_id243tbody0 > tr:nth-child(%s) > td:nth-child(1)'%count).text
+    )
+    pcts.append( driver.find_element_by_css_selector(
+    '#BHForm2\:accountID\:1\:_id243tbody0 > tr:nth-child(%s) > td:nth-child(7) > span:nth-child(1)'%count).text
+    )
+    count+=1
 
 print(total_gains)
 for i in range(len(etfs)):
