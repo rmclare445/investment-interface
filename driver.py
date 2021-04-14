@@ -1,6 +1,4 @@
 from selenium import webdriver
-from selenium.webdriver.firefox.options import Options
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 import keys as key
@@ -11,7 +9,7 @@ nETF = 3
 hls = True
 
 if hls:
-    options = Options()
+    options = webdriver.firefox.options.Options()
     options.add_argument('--headless')
     driver = webdriver.Firefox(executable_path=key.driverpath, options=options)
 else:
@@ -28,7 +26,7 @@ login.click()
 
 # Retrieve total earnings
 driver.get('https://personal.vanguard.com/us/XHTML/com/vanguard/costbasisnew/xhtml/CostBasisSummary.xhtml')
-total_gains = WebDriverWait(driver, 5).until(
+total_gains = webdriver.support.ui.WebDriverWait(driver, 5).until(
     EC.presence_of_element_located((By.CLASS_NAME, 'total.nr.right'))).text
 
 # Retrieve individual performance
